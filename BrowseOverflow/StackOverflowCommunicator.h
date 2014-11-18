@@ -11,16 +11,23 @@
 
 @interface StackOverflowCommunicator : NSObject <NSURLConnectionDataDelegate> {
 @protected
-    NSURL *fetchingURL;
     NSURLConnection *fetchingConnection;
     NSMutableData *receivedData;
-@private
+    // MOVIDOR PARA INTERFACE PROTEGIDA
     id <StackOverflowCommunicatorDelegate> __weak delegate;
+@private
+
     void (^errorHandler)(NSError *);
     void (^successHandler)(NSString *);
 }
 
 @property (weak) id <StackOverflowCommunicatorDelegate> delegate;
+
+// MOVIDO PARA INTERFACE PUBLICA
+@property NSURL *fetchingURL;
+- (void)fetchContentAtURL: (NSURL *)url errorHandler: (void(^)(NSError *error))errorBlock successHandler: (void(^)(NSString *objectNotation)) successBlock;
+- (void)launchConnectionForRequest: (NSURLRequest *)request;
+// ---
 
 - (void)searchForQuestionsWithTag: (NSString *)tag;
 - (void)downloadInformationForQuestionWithID: (NSInteger)identifier;

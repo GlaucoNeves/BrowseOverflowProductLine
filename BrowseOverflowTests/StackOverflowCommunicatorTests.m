@@ -8,6 +8,7 @@
 
 #import "StackOverflowCommunicatorTests.h"
 #import "InspectableStackOverflowCommunicator.h"
+#import "StackOverflowCommunicatorV20.h"
 #import "NonNetworkedStackOverflowCommunicator.h"
 #import "MockStackOverflowManager.h"
 #import "FakeURLResponse.h"
@@ -16,6 +17,7 @@
 
 - (void)setUp {
     communicator = [[InspectableStackOverflowCommunicator alloc] init];
+    communicatorV20 = [[StackOverflowCommunicatorV20 alloc] init];
     nnCommunicator = [[NonNetworkedStackOverflowCommunicator alloc] init];
     manager = [[MockStackOverflowManager alloc] init];
     nnCommunicator.delegate = manager;
@@ -27,19 +29,45 @@
     [communicator cancelAndDiscardURLConnection];
 }
 
-- (void)testSearchingForQuestionsOnTopicCallsTopicAPI {
-    [communicator searchForQuestionsWithTag: @"ios"];
-    XCTAssertEqualObjects([[communicator URLToFetch] absoluteString], @"http://api.stackoverflow.com/1.1/search?tagged=ios&pagesize=20", @"Use the search API to find questions with a particular tag");
+- (void)config_testSearchingForQuestionsOnTopicCallsTopicAPI {
+    if ([[self config:@"stackOverflowApiVersion"] isEqualToString:@"1.1"]) {
+        [self testSearchingForQuestionsOnTopicCallsTopicAPI:@"http://api.stackoverflow.com/1.1/search?tagged=ios&pagesize=20" withCommunicator:communicator];
+    } else {
+        [self testSearchingForQuestionsOnTopicCallsTopicAPI:@"https://api.stackexchange.com/2.2/questions?site=stackoverflow&tagged=ios&pagesize=20" withCommunicator:communicatorV20];
+    }
+
 }
 
-- (void)testFillingInQuestionBodyCallsQuestionAPI {
-    [communicator downloadInformationForQuestionWithID: 12345];
-    XCTAssertEqualObjects([[communicator URLToFetch] absoluteString], @"http://api.stackoverflow.com/1.1/questions/12345?body=true", @"Use the question API to get the body for a question");
+- (void)config_testFillingInQuestionBodyCallsQuestionAPI {
+    if ([[self config:@"stackOverflowApiVersion"] isEqualToString:@"1.1"]) {
+        [self testFillingInQuestionBodyCallsQuestionAPI:@"http://api.stackoverflow.com/1.1/questions/12345?body=true" withCommunicator:communicator];
+    } else {
+        [self testFillingInQuestionBodyCallsQuestionAPI:@"https://api.stackexchange.com/2.2/questions/12345?site=stackoverflow&body=true" withCommunicator:communicatorV20];
+    }
 }
 
-- (void)testFetchingAnswersToQuestionCallsQuestionAPI {
-    [communicator downloadAnswersToQuestionWithID: 12345];
-    XCTAssertEqualObjects([[communicator URLToFetch] absoluteString], @"http://api.stackoverflow.com/1.1/questions/12345/answers?body=true", @"Use the question API to get answers on a given question");
+- (void)config_testFetchingAnswersToQuestionCallsQuestionAPI {
+    if ([[self config:@"stackOverflowApiVersion"] isEqualToString:@"1.1"]) {
+        [self testFetchingAnswersToQuestionCallsQuestionAPI:@"http://api.stackoverflow.com/1.1/questions/12345/answers?body=true" withCommunicator:communicator];
+    } else {
+        [self testFetchingAnswersToQuestionCallsQuestionAPI:@"http://api.stackexchange.com/2.2/questions/12345/answers?site=stackoverflow&body=true" withCommunicator:communicatorV20];
+    }
+}
+
+
+- (void)testSearchingForQuestionsOnTopicCallsTopicAPI:(NSString *)apiLink withCommunicator:(StackOverflowCommunicator *)localCommunicator {
+    [localCommunicator searchForQuestionsWithTag: @"ios"];
+    XCTAssertEqualObjects([[localCommunicator fetchingURL] absoluteString], apiLink, @"Use the search API to find questions with a particular tag");
+}
+
+- (void)testFillingInQuestionBodyCallsQuestionAPI:(NSString *)apiLink withCommunicator:(StackOverflowCommunicator *)localCommunicator {
+    [localCommunicator downloadInformationForQuestionWithID: 12345];
+    XCTAssertEqualObjects([[localCommunicator fetchingURL] absoluteString], apiLink, @"Use the question API to get the body for a question");
+}
+
+- (void)testFetchingAnswersToQuestionCallsQuestionAPI:(NSString *)apiLink withCommunicator:(StackOverflowCommunicator *)localCommunicator {
+    [localCommunicator downloadAnswersToQuestionWithID: 12345];
+    XCTAssertEqualObjects([[localCommunicator fetchingURL] absoluteString], apiLink, @"Use the question API to get answers on a given question");
 }
 
 - (void)testSearchingForQuestionsCreatesURLConnection {

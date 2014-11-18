@@ -9,17 +9,22 @@
 #import "BrowseOverflowObjectConfiguration.h"
 #import "StackOverflowManager.h"
 #import "StackOverflowCommunicator.h"
+#import "StackOverflowCommunicatorV20.h"
 #import "QuestionBuilder.h"
 #import "AnswerBuilder.h"
 #import "AvatarStore.h"
+#import "Configurator.h"
+
 
 @implementation BrowseOverflowObjectConfiguration
 
 - (StackOverflowManager *)stackOverflowManager {
     StackOverflowManager *manager = [[StackOverflowManager alloc] init];
-    manager.communicator = [[StackOverflowCommunicator alloc] init];
+    manager.communicator = [[Configurator readEntry:@"stackOverflowApiVersion"] isEqualToString:@"2.0"] ?
+                                    [[StackOverflowCommunicatorV20 alloc] init] : [[StackOverflowCommunicator alloc] init];
     manager.communicator.delegate = manager;
-    manager.bodyCommunicator = [[StackOverflowCommunicator alloc] init];
+    manager.bodyCommunicator = [[Configurator readEntry:@"stackOverflowApiVersion"] isEqualToString:@"2.0"] ?
+                                    [[StackOverflowCommunicatorV20 alloc] init] : [[StackOverflowCommunicator alloc] init];
     manager.bodyCommunicator.delegate = manager;
     manager.questionBuilder = [[QuestionBuilder alloc] init];
     manager.answerBuilder = [[AnswerBuilder alloc] init];

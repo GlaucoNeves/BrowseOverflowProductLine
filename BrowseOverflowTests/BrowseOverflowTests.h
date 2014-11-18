@@ -6,10 +6,10 @@
 //  Copyright 2011 Fuzzy Aliens Ltd. All rights reserved.
 //
 
-#import <XCTest/XCTest.h>
+#import "MyTestCase.h"
 
 
-@interface BrowseOverflowTests : XCTestCase {
+@interface BrowseOverflowTests : MyTestCase {
 @private
     
 }

@@ -7,11 +7,11 @@
 //
 //  See Also: http://developer.apple.com/iphone/library/documentation/Xcode/Conceptual/iphone_development/135-Unit_Testing_Applications/unit_testing_applications.html
 
-#import <XCTest/XCTest.h>
+#import "MyTestCase.h"
 #import <UIKit/UIKit.h>
 @class Answer;
 
-@interface AnswerTests : XCTestCase {
+@interface AnswerTests : MyTestCase {
     Answer *answer;
     Answer *otherAnswer;
 }

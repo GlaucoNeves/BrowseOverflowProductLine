@@ -10,8 +10,8 @@
 
 @interface StackOverflowCommunicator ()
 
-- (void)fetchContentAtURL: (NSURL *)url errorHandler: (void(^)(NSError *error))errorBlock successHandler: (void(^)(NSString *objectNotation)) successBlock;
-- (void)launchConnectionForRequest: (NSURLRequest *)request;
+//- (void)fetchContentAtURL: (NSURL *)url errorHandler: (void(^)(NSError *error))errorBlock successHandler: (void(^)(NSString *objectNotation)) successBlock;
+//- (void)launchConnectionForRequest: (NSURLRequest *)request;
 
 @end
 
@@ -25,10 +25,10 @@
 
 }
 - (void)fetchContentAtURL:(NSURL *)url errorHandler:(void (^)(NSError *))errorBlock successHandler:(void (^)(NSString *))successBlock {
-    fetchingURL = url;
+    _fetchingURL = url;
     errorHandler = [errorBlock copy];
     successHandler = [successBlock copy];
-    NSURLRequest *request = [NSURLRequest requestWithURL: fetchingURL];
+    NSURLRequest *request = [NSURLRequest requestWithURL: _fetchingURL];
     
     [self launchConnectionForRequest: request];
 
@@ -95,13 +95,13 @@
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
     receivedData = nil;
     fetchingConnection = nil;
-    fetchingURL = nil;
+    _fetchingURL = nil;
     errorHandler(error);
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
     fetchingConnection = nil;
-    fetchingURL = nil;
+    _fetchingURL = nil;
     NSString *receivedText = [[NSString alloc] initWithData: receivedData
                                                    encoding: NSUTF8StringEncoding];
     receivedData = nil;

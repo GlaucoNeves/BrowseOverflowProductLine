@@ -6,12 +6,12 @@
 //  Copyright 2011 Fuzzy Aliens Ltd. All rights reserved.
 //
 
-#import <XCTest/XCTest.h>
+#import "MyTestCase.h"
 #import <UIKit/UIKit.h>
 
 @class Topic;
 
-@interface TopicTests : XCTestCase {
+@interface TopicTests : MyTestCase {
     Topic *topic;
 }
 

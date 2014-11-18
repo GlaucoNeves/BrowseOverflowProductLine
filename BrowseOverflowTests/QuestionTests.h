@@ -7,14 +7,14 @@
 //
 //  See Also: http://developer.apple.com/iphone/library/documentation/Xcode/Conceptual/iphone_development/135-Unit_Testing_Applications/unit_testing_applications.html
 
-#import <XCTest/XCTest.h>
+#import "MyTestCase.h"
 #import <UIKit/UIKit.h>
 //#import "application_headers" as required
 @class Question;
 @class Answer;
 @class Person;
 
-@interface QuestionTests : XCTestCase {
+@interface QuestionTests : MyTestCase {
     Question *question;
     Person *asker;
     Answer *lowScore;

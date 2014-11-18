@@ -8,6 +8,7 @@
 
 #import "Topic.h"
 #import "Question.h"
+#import "Configurator.h"
 
 @interface Topic ()
 
@@ -18,12 +19,14 @@
 @implementation Topic
 @synthesize name;
 @synthesize tag;
+@synthesize limit;
 
 - (id)initWithName:(NSString *)newName tag: (NSString *)newTag {
     if ((self = [super init])) {
         name = [newName copy];
         tag = [newTag copy];
         questions = [[NSArray alloc] init];
+        limit = [[Configurator readEntry:@"limitOfQuestions"] intValue];
     }
     return self;
 }
@@ -31,9 +34,9 @@
 
 - (void)addQuestion: (Question *)question {
     NSArray *newQuestions = [questions arrayByAddingObject: question];
-    if ([newQuestions count] > 20) {
+    if ([newQuestions count] > limit) {
         newQuestions = [self sortQuestionsLatestFirst: newQuestions];
-        newQuestions = [newQuestions subarrayWithRange: NSMakeRange(0, 20)];
+        newQuestions = [newQuestions subarrayWithRange: NSMakeRange(0, limit)];
     }
     questions = newQuestions;
 }

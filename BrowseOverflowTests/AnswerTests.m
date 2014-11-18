@@ -54,10 +54,20 @@
     XCTAssertEqual([otherAnswer compare: answer], NSOrderedSame, @"Each answer has the same rank");
 }
 
-- (void)testLowerScoringAnswerComesAfterHigher {
-    otherAnswer.score = answer.score + 10;
+- (void)config_testLowerScoringAnswerComesAfterHigher {
+    [self configureAnswersForTestingSorting:[self config:@"answerSorting"]];
     XCTAssertEqual([answer compare: otherAnswer], NSOrderedDescending, @"Higher score comes first");
     XCTAssertEqual([otherAnswer compare: answer], NSOrderedAscending, @"Lower score comes second");
+}
+
+- (void)configureAnswersForTestingSorting:(NSString *)answerSorting{
+    if ([answerSorting isEqualToString:@"upvote"]) {
+        otherAnswer.score = answer.score + 10;
+    }
+    if ([answerSorting isEqualToString:@"date"]) {
+        otherAnswer.date = [NSDate distantFuture];
+        answer.date = [NSDate distantPast];
+    }
 }
 
 @end

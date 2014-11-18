@@ -8,6 +8,7 @@
 
 #import "Answer.h"
 #import "Person.h"
+#import "Configurator.h"
 
 @implementation Answer
 
@@ -15,8 +16,19 @@
 @synthesize person;
 @synthesize accepted;
 @synthesize score;
+@synthesize date;
 
 - (NSComparisonResult)compare:(Answer *)otherAnswer {
+    if ([[Configurator readEntry:@"answerSorting"] isEqualToString:@"upvote"]) {
+        return [self compareUpvote:otherAnswer];
+    }
+    if ([[Configurator readEntry:@"answerSorting"] isEqualToString:@"date"]) {
+        return [self compareDate:otherAnswer];
+    }
+    return nil;
+}
+
+- (NSComparisonResult)compareUpvote:(Answer *)otherAnswer {
     if (accepted && !(otherAnswer.accepted)) {
         return NSOrderedAscending;
     } else if (!accepted && otherAnswer.accepted){
@@ -29,6 +41,10 @@
     } else {
         return NSOrderedSame;
     }
+}
+
+- (NSComparisonResult)compareDate:(Answer *)otherAnswer {
+    return nil;
 }
 
 

@@ -17,6 +17,7 @@
 @property (retain) Person *person;
 @property (getter=isAccepted) BOOL accepted;
 @property NSInteger score;
+@property NSDate *date;
 
 - (NSComparisonResult)compare: (Answer *)otherAnswer;
 

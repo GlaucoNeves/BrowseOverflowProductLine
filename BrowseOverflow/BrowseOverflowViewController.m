@@ -14,6 +14,9 @@
 #import "StackOverflowManager.h"
 #import "Topic.h"
 #import <objc/runtime.h>
+#import "Configurator.h"
+#import "TopicViewController.h"
+
 
 @implementation BrowseOverflowViewController
 
@@ -44,12 +47,24 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.title = [Configurator readEntry:@"title"];
     self.tableView.delegate = self.dataSource;
     self.tableView.dataSource = self.dataSource;
     objc_property_t tableViewProperty = class_getProperty([dataSource class], "tableView");
     if (tableViewProperty) {
         [dataSource setValue: tableView forKey: @"tableView"];
     }
+    // NOVO CODIGO
+    if ([self.dataSource isKindOfClass: [TopicTableDataSource class]]) {
+        UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNewTopic:)];
+        self.navigationItem.rightBarButtonItem = addButton;
+    }
+}
+
+- (void)addNewTopic:(id)sender {
+    TopicViewController *nextViewController = [[TopicViewController alloc] init];
+    nextViewController.dataSource = self.dataSource;
+    [[self navigationController] pushViewController: nextViewController animated: YES];
 }
 
 - (void)viewDidUnload

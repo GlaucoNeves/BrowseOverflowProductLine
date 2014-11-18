@@ -26,6 +26,10 @@ NSString *topicCellReuseIdentifier = @"Topic";
     topics = newTopics;
 }
 
+- (NSArray *)getTopics {
+    return topics;
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     NSParameterAssert(section == 0);
     return [topics count];

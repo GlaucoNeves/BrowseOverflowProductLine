@@ -11,6 +11,7 @@
 @interface TopicTableDataSource : NSObject <UITableViewDataSource, UITableViewDelegate>
 
 - (void)setTopics: (NSArray *)newTopics;
+- (NSArray *)getTopics;
 
 @end
 

@@ -388,4 +388,9 @@ static const char *viewWillAppearKey = "BrowseOverflowViewControllerTestsViewWil
     XCTAssertTrue([watcher didReceiveReloadData], @"Table reloaded when question body received");
 }
 
+- (void)config_testViewControllerHasAConfiguredTitle {
+    [viewController viewDidLoad];
+    XCTAssertEqualObjects(viewController.navigationController.title, [self config:@"title"]);
+}
+
 @end

@@ -23,6 +23,10 @@
  * The text with which questions on this topic get tagged on the website.
  */
 @property (readonly, strong) NSString *tag;
+/**
+ * The limit of questions
+ */
+@property int limit;
 
 /**
  * Initialise a new instance of this class with a particular name and tag.

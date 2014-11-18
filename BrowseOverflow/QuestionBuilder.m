@@ -29,7 +29,8 @@
         }
         return nil;
     }
-    NSArray *questions = [parsedObject objectForKey: @"questions"];
+    //    NSArray *questions = [parsedObject objectForKey: @"questions"];
+    NSArray *questions = [parsedObject objectForKey: @"items"];
     if (questions == nil) {
         if (error != NULL) {
             *error = [NSError errorWithDomain:QuestionBuilderErrorDomain code: QuestionBuilderMissingDataError userInfo:nil];
